@@ -1,0 +1,22 @@
+## 设置端口
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.40.190.1:3306/tmx_riven
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      ## 最小空闲连接数量
+      minimum-idle: 10
+      ## 空闲连接存活最大时间 默认600000（10分钟）
+      idle-timeout: 180000
+      ## 最大连接池数量
+      maximum-pool-size: 10
+      ## 是否自动提交
+      auto-commit: true
+      ## 连接超时 30秒
+      connection-timeout: 30000
