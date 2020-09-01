@@ -39,7 +39,7 @@ public class RivenArrayLsit implements Serializable {
     public void add(Object object) {
         // 1.判断容量是否大于elementData容量
         if (size == this.elementData.length) {
-            int newCapacity = 2 * size;
+            int newCapacity = size + (size >> 1);
             elementData = Arrays.copyOf(elementData, newCapacity);
         }
         // 2.使用下标进行赋值
