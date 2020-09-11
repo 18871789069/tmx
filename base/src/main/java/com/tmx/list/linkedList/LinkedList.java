@@ -31,6 +31,7 @@ public class LinkedList<E> {
     }
 
     public void add(int i, E e) {
+        rangCheck(i);
         Node<E> newNode = new Node<>();
         // 旧节点数据
         Node<E> oldNode = getNode(i);
@@ -52,9 +53,43 @@ public class LinkedList<E> {
         size++;
     }
 
+    // 删除节点
+    public void remove(int index) {
+        rangCheck(index);
+        Node<E> oldNode = getNode(index);
+        Node<E> oldNodePrev = oldNode.prev;
+        Node<E> oldNodeNext = oldNode.next;
+        if (oldNodePrev == null) {
+            first = oldNodeNext;
+        } else {
+            oldNodePrev.next = oldNodeNext;
+        }
+        if (oldNodeNext == null) {
+            last = oldNodePrev;
+        } else {
+            oldNodeNext.prev = oldNodePrev;
+        }
+        size--;
+    };
+
+    // 更新节点
+    public E set(int index, E e) {
+        rangCheck(index);
+        Node<E> oldNode = getNode(index);
+        E old = oldNode.e;
+        oldNode.e = e;
+        return old;
+    }
+
     public E get(int index) {
+        rangCheck(index);
         LinkedList<E>.Node<E> node = getNode(index);
         return (E) node.e;
+    }
+
+    private void rangCheck(int index) {
+        if (index >= size)
+            throw new IndexOutOfBoundsException("下标越界");
     }
 
     public Node getNode(int index) {
@@ -66,5 +101,9 @@ public class LinkedList<E> {
             }
         }
         return node;
+    }
+
+    public int getSize() {
+        return size;
     }
 }
