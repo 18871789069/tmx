@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Created By Riven on 2020-8-27
  */
-public class RivenArrayLsit implements Serializable {
+public class RivenArrayLsit<E> implements RivenList<E>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,34 +36,85 @@ public class RivenArrayLsit implements Serializable {
     }
 
     // 添加元素
-    public void add(Object object) {
+    @Override
+    public void add(E e) {
         // 1.判断容量是否大于elementData容量
-        if (size == this.elementData.length) {
-            int newCapacity = size + (size >> 1);
-            elementData = Arrays.copyOf(elementData, newCapacity);
-        }
+        ensureExplicitCapacity(size + 1);
         // 2.使用下标进行赋值
-        this.elementData[size++] = object;
+        this.elementData[size++] = e;
+    }
+
+    public void add(int index, E e) {
+        ensureExplicitCapacity(size + 1);
+        int numMoved = size - index;
+        System.arraycopy(elementData, index, elementData, index + 1, numMoved);
+        elementData[index] = e;
+        size++;
     }
 
     // 获取元素
-    public Object get(int i) {
-        if (i >= size) {
-            throw new IndexOutOfBoundsException("数组越界：" + i);
-        }
-        return this.elementData[i];
+    @Override
+    public E get(int i) {
+        rangeCheck(i);
+        return (E) this.elementData[i];
     }
 
     // 重新填入数据
-    public void set(int i, Object o) {
-        if (i >= size) {
-            throw new IndexOutOfBoundsException("数组越界：" + i);
+    @Override
+    public void set(int i, E e) {
+        rangeCheck(i);
+        elementData[i] = e;
+    }
+
+    private void ensureExplicitCapacity(int miniCapacity) {
+        if (size == elementData.length) {
+            int oldCapacity = elementData.length;
+            int newCapacity = oldCapacity + oldCapacity >> 1;
+            if (newCapacity - miniCapacity < 0)
+                newCapacity = miniCapacity;
+            elementData = Arrays.copyOf(elementData, newCapacity);
         }
-        elementData[i] = o;
     }
 
     // 获取当前数组长度
     public int getSize() {
         return size;
+    }
+
+    private void rangeCheck(int index) {
+        if (index >= size)
+            throw new IndexOutOfBoundsException("数组越界：" + index);
+    }
+
+    // 根据索引删除对象
+    @Override
+    public E remove(int index) {
+        rangeCheck(index);
+        E e = get(index);
+        int numMoved = size - index - 1;
+        // 往前移动的数组
+        if (numMoved > 0)
+            System.arraycopy(elementData, index + 1, elementData, index, numMoved);
+        elementData[--size] = null;
+        return e;
+    }
+
+    public boolean remove(E e) {
+        if (e == null) {
+            for (int i = 0; i < size; i++) {
+                E value = get(i);
+                if (value == null)
+                    remove(i);
+                return true;
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                E value = get(i);
+                if (e.equals(value))
+                    remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 }

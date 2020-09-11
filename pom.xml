@@ -19,6 +19,7 @@
     <modules>
         <module>tmx-web</module>
         <module>base</module>
+        <module>tmx-kafka-product</module>
     </modules>
 
     <repositories>
