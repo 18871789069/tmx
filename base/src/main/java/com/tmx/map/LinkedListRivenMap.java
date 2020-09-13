@@ -12,6 +12,7 @@ public class LinkedListRivenMap<K,V> {
 
     private int size;
 
+    // 新增键值对或者修改
     public void put(K key, V value) {
         Entry<K,V> newEntry = new Entry<>(key, value);
         int hash = getHash(key);
@@ -36,9 +37,23 @@ public class LinkedListRivenMap<K,V> {
         size++;
     }
 
+    // 通过键获取值
     public V get(K key) {
         Entry<K,V> entry = getEntry(key);
         return entry == null ? null : entry.value;
+    }
+
+    // 删除
+    public V remove(K key) {
+        Entry<K,V> oldEntry = getEntry(key);
+        int hash = getHash(key);
+        LinkedList<Entry<K, V>> entryList = tables[hash];
+        for (Entry<K,V> entry: entryList) {
+            if (entry.key.equals(key)) {
+                entryList.remove();
+            }
+        }
+        return oldEntry.value;
     }
 
     public Entry getEntry(K key) {
@@ -61,10 +76,6 @@ public class LinkedListRivenMap<K,V> {
         return hash;
     }
 
-    public int getSize() {
-        return size;
-    }
-
     class Entry<K,V> {
         K key;
         V value;
@@ -72,16 +83,5 @@ public class LinkedListRivenMap<K,V> {
             this.key = key;
             this.value = value;
         }
-    }
-
-    public static void main(String[] args) {
-        LinkedListRivenMap<String, String> linkedListRivenMap = new LinkedListRivenMap<>();
-        linkedListRivenMap.put("a", "aaaaaaa");
-        linkedListRivenMap.put("b", "bbbbbbb");
-        linkedListRivenMap.put("c", "ccccccc");
-        linkedListRivenMap.put("b", "ddddddd");
-        System.out.println(linkedListRivenMap.get("a"));
-        System.out.println(linkedListRivenMap.get("b"));
-        System.out.println(linkedListRivenMap.get("c"));
     }
 }
