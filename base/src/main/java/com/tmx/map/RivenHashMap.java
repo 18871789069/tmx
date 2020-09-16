@@ -10,7 +10,9 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
     private static final long serialVersionUID = 1L;
 
     // 默认空间大小 16
-    private static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+    private int DEFAULT_INITIAL_CAPACITY = 1 << 3; // aka 16
+
+    private float DEFAULT_LOAD_FACTOR = 0.75f;
 
     private int size;
 
@@ -26,10 +28,12 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
         if (table == null) {
             table = new Node[DEFAULT_INITIAL_CAPACITY];
         }
-        // 扩容处理
+        // 只做一次扩容处理
+        if (size > DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR) {
+            resize();
+        }
         // 获取链表存储位置
-        int hash = key.hashCode();
-        int index = hash % table.length;
+        int index = getIndex(key, table.length);
         // node处理
         Node<K, V> node = table[index];
         if (node == null) {
@@ -40,8 +44,6 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
             Node<K, V> newNode = node;
             while (newNode != null) {
                 if (newNode.key.equals(key) || newNode.getKey() == key) {
-//                    newNode.value = value;
-//                    return null;
                     return newNode.setValue(value);
                 } else {
                     // 利用newNode进行处理，不改变node的值
@@ -57,6 +59,35 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
         return null;
     }
 
+    private int getIndex(K key, int length) {
+        int hash = key.hashCode();
+        return hash % length;
+    }
+
+    // 扩容处理
+    private void resize() {
+        // 创建新的数组
+        Node<K, V>[] newTable = new Node[DEFAULT_INITIAL_CAPACITY << 1];
+        // 遍历老数组
+        for (int i = 0; i < table.length; i++) {
+            Node<K, V> oldNode = table[i];
+            while (oldNode != null) {
+                table[i] = null;
+                K key = oldNode.key;
+                // 计算新的下标
+                int index = getIndex(key, newTable.length);
+                Node<K, V> oldNodeNext = oldNode.next;
+                // 判断newTable数组中,是否存在下标相同，如果下标相同则存放在原来的.next
+                oldNode.next = newTable[index];
+                // 先将oldNode的第一个节点赋值
+                newTable[index] = oldNode;
+                oldNode = oldNodeNext;
+            }
+        }
+        table = newTable;
+        DEFAULT_INITIAL_CAPACITY = DEFAULT_INITIAL_CAPACITY << 1;
+    }
+
     @Override
     public V get(K key) {
         Node<K, V> node = getNode(key);
@@ -65,8 +96,7 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
 
     private Node<K, V> getNode(K key) {
         // 获取node所在的数组位置
-        int hash = key.hashCode();
-        int index = hash % table.length;
+        int index = getIndex(key, table.length);
         Node<K, V> node = table[index];
         while (node != null) {
             if (node.key.equals(key)) {
@@ -138,10 +168,10 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
         rivenMap.put("8号", "dddddd");
         rivenMap.put("9号", "9号");
         rivenMap.put("15号", "15号");
-        rivenMap.put("16号", "16号");
-        rivenMap.put("17号", "16号");
-        rivenMap.put("37号", "dddddd");
-        rivenMap.put("37号", "222222222");
+//        rivenMap.put("16号", "16号");
+//        rivenMap.put("17号", "16号");
+//        rivenMap.put("37号", "dddddd");
+//        rivenMap.put("37号", "222222222");
         rivenMap.print();
 //        System.out.println(rivenMap.get("1号"));
 //        System.out.println(rivenMap.get("2号"));
