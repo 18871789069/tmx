@@ -41,22 +41,57 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
             size++;
         } else {
             // 链表存在，需要查看是否存在键，存在则替换，否则新增
-            Node<K, V> newNode = node;
-            while (newNode != null) {
-                if (newNode.key.equals(key) || newNode.getKey() == key) {
-                    return newNode.setValue(value);
+            Node<K, V> first = node;
+            while (first != null) {
+                if (first.key.equals(key) || first.getKey() == key) {
+                    return first.setValue(value);
                 } else {
                     // 利用newNode进行处理，不改变node的值
-                    if (newNode.next == null) {
+                    if (first.next == null) {
                         node = new Node(key, value, node);
                         size++;
                     }
-                    newNode = newNode.next;
+                    first = first.next;
                 }
             }
         }
         table[index] = node;
         return null;
+    }
+
+    public V remove(K key) {
+        // 先找到数组位置
+        Node<K, V> node = removeNode(key);
+        return node == null ? null : node.value;
+    }
+
+    /**
+     * 对象不是new出来的就会公用一个存储空间
+     * kvNode 对象即 table[index]
+     * 遍历kvNode且对kvNode的子节点赋值修改就是对table[index]进行修改
+     * @param key
+     * @return
+     */
+    private Node<K, V> removeNode(K key) {
+        int index = getIndex(key, table.length);
+        // 数组的当前node
+        Node<K, V> kvNode = table[index];
+        Node<K, V> node = kvNode;
+        while (node != null) {
+            Node<K, V> next = node.next;
+            if (node.key.equals(key)) {
+                size--;
+                if (kvNode == node) {
+                    table[index] = next;
+                } else {
+                    kvNode.next = next;
+                }
+                return node;
+            }
+            kvNode = node;
+            node = next;
+        }
+        return node;
     }
 
     private int getIndex(K key, int length) {
@@ -132,6 +167,10 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
 
         private Node<K, V> next;
 
+        public Node() {
+
+        }
+
         @Override
         public K getKey() {
             return key;
@@ -167,11 +206,25 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
         rivenMap.put("7号", "dddddd");
         rivenMap.put("8号", "dddddd");
         rivenMap.put("9号", "9号");
-        rivenMap.put("15号", "15号");
-//        rivenMap.put("16号", "16号");
-//        rivenMap.put("17号", "16号");
-//        rivenMap.put("37号", "dddddd");
-//        rivenMap.put("37号", "222222222");
+        rivenMap.put("10号", "9号");
+        rivenMap.put("11号", "9号");
+        rivenMap.put("12号", "9号");
+        rivenMap.put("13号", "9号");
+        rivenMap.put("14号", "9号");
+        rivenMap.put("15号", "15222222号");
+        rivenMap.put("16号", "16号");
+        rivenMap.put("17号", "16号");
+        rivenMap.put("18号", "15222222号");
+        rivenMap.put("19号", "15222222号");
+        rivenMap.put("20号", "15222222号");
+        rivenMap.put("21号", "15222222号");
+        rivenMap.put("37号", "dddddd");
+        rivenMap.put("37号", "222222222");
+        System.out.println("=========移除前");
+        rivenMap.print();
+        String remove = rivenMap.remove("10号");
+        System.out.println(remove);
+        System.out.println("=========移除后");
         rivenMap.print();
 //        System.out.println(rivenMap.get("1号"));
 //        System.out.println(rivenMap.get("2号"));
