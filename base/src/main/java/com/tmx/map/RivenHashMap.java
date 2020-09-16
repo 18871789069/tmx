@@ -147,18 +147,6 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
         return size;
     }
 
-    void print() {
-        for (int i = 0; i < table.length; i++) {
-            System.out.print("这是第【" + i +"】个数组位置：");
-            Node<K, V> kvNode = table[i];
-            while (kvNode != null) {
-                System.out.print("[key:"+kvNode.key+";value:"+kvNode.value +"]");
-                kvNode = kvNode.next;
-            }
-            System.out.println();
-        }
-    }
-
     class Node<K, V> implements Entry<K, V> {
 
         private K key;
@@ -195,46 +183,4 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
         };
     }
 
-    public static void main(String[] args) {
-        RivenHashMap<String, String> rivenMap = new RivenHashMap<>();
-        rivenMap.put("1号", "aaaaaa");
-        rivenMap.put("2号", "2222");
-        rivenMap.put("3号", "33333");
-        rivenMap.put("4号", "dddddd");
-        rivenMap.put("5号", "2222");
-        rivenMap.put("6号", "33333");
-        rivenMap.put("7号", "dddddd");
-        rivenMap.put("8号", "dddddd");
-        rivenMap.put("9号", "9号");
-        rivenMap.put("10号", "9号");
-        rivenMap.put("11号", "9号");
-        rivenMap.put("12号", "9号");
-        rivenMap.put("13号", "9号");
-        rivenMap.put("14号", "9号");
-        rivenMap.put("15号", "15222222号");
-        rivenMap.put("16号", "16号");
-        rivenMap.put("17号", "16号");
-        rivenMap.put("18号", "15222222号");
-        rivenMap.put("19号", "15222222号");
-        rivenMap.put("20号", "15222222号");
-        rivenMap.put("21号", "15222222号");
-        rivenMap.put("37号", "dddddd");
-        rivenMap.put("37号", "222222222");
-        System.out.println("=========移除前");
-        rivenMap.print();
-        String remove = rivenMap.remove("10号");
-        System.out.println(remove);
-        System.out.println("=========移除后");
-        rivenMap.print();
-//        System.out.println(rivenMap.get("1号"));
-//        System.out.println(rivenMap.get("2号"));
-//        System.out.println(rivenMap.get("3号"));
-//        System.out.println(rivenMap.get("4号"));
-//        System.out.println(rivenMap.get("5号"));
-//        System.out.println(rivenMap.get("6号"));
-//        System.out.println(rivenMap.get("7号"));
-//        System.out.println(rivenMap.get("8号"));
-//        System.out.println(rivenMap.get("9号"));
-        System.out.println(rivenMap.get("15号"));
-    }
 }
