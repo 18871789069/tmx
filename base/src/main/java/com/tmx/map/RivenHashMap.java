@@ -10,16 +10,18 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
     private static final long serialVersionUID = 1L;
 
     // 默认空间大小 16
-    private int DEFAULT_INITIAL_CAPACITY = 1 << 3; // aka 16
+    private int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
 
-    private float DEFAULT_LOAD_FACTOR = 0.75f;
+    private final float DEFAULT_LOAD_FACTOR = 0.75f;
 
     private int size;
+
+    private final float loadFactor;
 
     private Node<K, V>[] table = null;
 
     public RivenHashMap() {
-
+        this.loadFactor = DEFAULT_LOAD_FACTOR;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
             table = new Node[DEFAULT_INITIAL_CAPACITY];
         }
         // 只做一次扩容处理
-        if (size > DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR) {
+        if (size > DEFAULT_INITIAL_CAPACITY * this.loadFactor) {
             resize();
         }
         // 获取链表存储位置
@@ -69,8 +71,8 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
      * 对象不是new出来的就会公用一个存储空间
      * kvNode 对象即 table[index]
      * 遍历kvNode且对kvNode的子节点赋值修改就是对table[index]进行修改
-     * @param key
-     * @return
+     * @param key 键
+     * @return node
      */
     private Node<K, V> removeNode(K key) {
         int index = getIndex(key, table.length);
@@ -176,11 +178,11 @@ public class RivenHashMap<K,V> implements RivenMap<K, V>, Serializable {
             return oldValue;
         }
 
-        public Node(K key, V value, Node next) {
+        public Node(K key, V value, Node<K, V> next) {
             this.key = key;
             this.value = value;
             this.next = next;
-        };
+        }
     }
 
 }
