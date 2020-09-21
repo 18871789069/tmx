@@ -1,4 +1,4 @@
-package com.tmx.spring;
+package com.tmx.spring.proxy;
 
 import com.tmx.spring.dao.IUserDao;
 

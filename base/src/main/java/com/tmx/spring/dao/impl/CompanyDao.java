@@ -7,7 +7,7 @@ import com.tmx.spring.dao.ICompanyDao;
  */
 public class CompanyDao implements ICompanyDao {
     @Override
-    public void save() {
+    public void add() {
         System.out.println("动态代理");
     }
 }

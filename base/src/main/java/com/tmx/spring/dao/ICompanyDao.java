@@ -5,5 +5,5 @@ package com.tmx.spring.dao;
  */
 public interface ICompanyDao {
 
-    void save();
+    void add();
 }
