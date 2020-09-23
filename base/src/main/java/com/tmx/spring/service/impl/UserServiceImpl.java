@@ -1,5 +1,6 @@
 package com.tmx.spring.service.impl;
 
+import com.tmx.annotation.RivenTransactional;
 import com.tmx.spring.dao.UserDao;
 import com.tmx.spring.service.UserService;
 import com.tmx.spring.util.TransactionUtil;
@@ -24,9 +25,10 @@ public class UserServiceImpl implements UserService {
      * try catch不会把事务反馈到AOP
      */
     @Override
+    @RivenTransactional
     public void add() {
         userDao.add("1","111","123","riven", 18);
-        int i = 1 / 1;
+//        int i = 1 / 0;
         userDao.add("2","222","123","riven", 18);
 //        try {
 //            userDao.add("1","111","123","riven", 18);

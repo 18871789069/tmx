@@ -12,8 +12,8 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
  * Created By Riven on 2020-9-22
  *
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class AopTransaction {
 
     @Autowired
