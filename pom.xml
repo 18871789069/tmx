@@ -20,6 +20,7 @@
         <module>tmx-web</module>
         <module>base</module>
         <module>tmx-kafka-product</module>
+        <module>spring</module>
     </modules>
 
     <repositories>
